@@ -6,6 +6,7 @@ import android.widget.Button;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,7 +15,8 @@ public class QuizActivity extends ActionBarActivity {
 
     private Button mTrueButton;
     private Button mFalseButton;
-    private Button mNextButton;
+    private ImageButton mNextButton;
+    private ImageButton mPreButton;
     private TextView mQuestionTextView;
     /**
      * Created an array that consists of the newly created objects/instances of TrueFalse Class.
@@ -32,6 +34,7 @@ public class QuizActivity extends ActionBarActivity {
 
     private void updateQuestion()
     {
+
         int question = mQuestionBank[mCurrentIndex].getQuestion(); //found the current question's string id
         mQuestionTextView.setText(question); //passed the id as a parameter to set its text to TextView
     }
@@ -40,9 +43,9 @@ public class QuizActivity extends ActionBarActivity {
         boolean answerIsTrue = mQuestionBank[mCurrentIndex].isTrueQuestion(); //gets the real answer
         int messageResId = 0; //result message id
         if (userPressedTrue == answerIsTrue) {
-            messageResId = R.string.correct_toast;
+            messageResId = R.string.true_answer;
         } else {
-            messageResId = R.string.incorrect_toast;
+            messageResId = R.string.false_answer;
         }
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT)
                 .show();
@@ -53,19 +56,23 @@ public class QuizActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-        updateQuestion();
-
         mQuestionTextView = (TextView)findViewById(R.id.question_text_view); //get a reference for textView from its id
+        int question = mQuestionBank[mCurrentIndex].getQuestion();
+        mQuestionTextView.setText(question);
+
 
         mTrueButton = (Button)findViewById(R.id.true_button);
         mFalseButton = (Button)findViewById(R.id.false_button);
-        mNextButton = (Button)findViewById(R.id.next_button);
+        mNextButton = (ImageButton)findViewById(R.id.next_button);
+        mPreButton = (ImageButton)findViewById(R.id.pre_button);
 
         mTrueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(QuizActivity.this,R.string.correct_toast,Toast.LENGTH_SHORT).show();
                 checkAnswer(true); //assign user's answer as True
+                mCurrentIndex = (mCurrentIndex + 1)%mQuestionBank.length;
+                updateQuestion(); //additional automatic pass
             }
         });
 
@@ -81,11 +88,25 @@ public class QuizActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 mCurrentIndex = (mCurrentIndex+1)%mQuestionBank.length; //increment the current index by one and prevent it from boundException
+                updateQuestion();
             }
         });
 
+        mPreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCurrentIndex = (mCurrentIndex-1)%mQuestionBank.length;
+                updateQuestion();
+            }
+        });
 
-        updateQuestion();
+        mQuestionTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
+                updateQuestion();
+            }
+        });
 
     }
 
@@ -94,20 +115,5 @@ public class QuizActivity extends ActionBarActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_quiz, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }
