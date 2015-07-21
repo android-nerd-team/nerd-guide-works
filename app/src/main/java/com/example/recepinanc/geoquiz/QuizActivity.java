@@ -112,6 +112,10 @@ public class QuizActivity extends ActionBarActivity {
             }
         });
 
+        if(savedInstanceState != null){
+            mCurrentIndex = savedInstanceState.getInt(KEY_INDEX,0);
+        }
+
 
     }
 
