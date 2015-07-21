@@ -116,7 +116,7 @@ public class QuizActivity extends ActionBarActivity {
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX,0);
         }
 
-
+        updateQuestion();
     }
 
     @Override
