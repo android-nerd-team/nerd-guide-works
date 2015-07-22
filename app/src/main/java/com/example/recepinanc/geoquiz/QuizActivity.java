@@ -99,7 +99,7 @@ public class QuizActivity extends ActionBarActivity {
         mPreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCurrentIndex = (mCurrentIndex-1)%mQuestionBank.length;
+                mCurrentIndex = ((mCurrentIndex-1)+mQuestionBank.length)% mQuestionBank.length;
                 updateQuestion();
             }
         });
