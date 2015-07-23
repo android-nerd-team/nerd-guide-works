@@ -1,5 +1,6 @@
 package com.example.recepinanc.geoquiz;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +22,7 @@ public class QuizActivity extends ActionBarActivity {
     private Button mFalseButton;
     private ImageButton mNextButton;
     private ImageButton mPreButton;
+    private Button mCheatButton;
     private TextView mQuestionTextView;
     /**
      * Created an array that consists of the newly created objects/instances of TrueFalse Class.
@@ -69,6 +71,7 @@ public class QuizActivity extends ActionBarActivity {
         mFalseButton = (Button)findViewById(R.id.false_button);
         mNextButton = (ImageButton)findViewById(R.id.next_button);
         mPreButton = (ImageButton)findViewById(R.id.pre_button);
+        mCheatButton = (Button)findViewById(R.id.cheat_button);
 
         mTrueButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,6 +112,14 @@ public class QuizActivity extends ActionBarActivity {
             public void onClick(View v) {
                 mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
                 updateQuestion();
+            }
+        });
+
+        mCheatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(QuizActivity.this,CheatActivity.class);
+                startActivity(i);
             }
         });
 
