@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">EtkinlikOgreniyorum</string>
+
+    <string name="baslik">Kayıt Formu</string>
+    <string name="action_settings">Settings</string>
+    <string name="soru1">Adınız</string>
+    <string name="soru2">Soyadınız</string>
+    <string name="soru3">Yaşınız</string>
+    <string name="soru4">Cinsiyetiniz</string>
+    <string name="soru5">İletiniz</string>
+    <string name="erkekCinsiyet">Erkek</string>
+    <string name="kadinCinsiyet">Kadın</string>
+    <string name="gonder">Gönder</string>
+    <string name="temizle">Temizle</string>
+    <string name="geri_button">Geri</string>
+    <string name="hata">Veri Aktarılırken Hata Oluştu! \n Lütfen Boş Alan Bırakmayınız.</string>
+    <string name="metin_bay">Bay</string>
+    <string name="metin_bayan">Bayan</string>
+    <string name="metin_diyor">diyor ki:\n\n</string>
+
+</resources>
