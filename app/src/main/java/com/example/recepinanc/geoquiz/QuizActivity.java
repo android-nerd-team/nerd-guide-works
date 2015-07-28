@@ -55,18 +55,24 @@ public class QuizActivity extends ActionBarActivity {
         boolean answerIsTrue = mQuestionBank[mCurrentIndex].isTrueQuestion(); //gets the real answer
         int messageResId = 0; //result message id
 
-        if (mIsCheater) {
-            messageResId = R.string.judgment_toast;
+        if (mIsCheater) {                                                //It was checkhing but the Toast was inside of the wrong block of code. Fixed.
+            if (userPressedTrue == answerIsTrue) {
+                messageResId = R.string.judgment_toast;
+            } else {
+                messageResId = R.string.incorrect_judgement_toast;
+            }
         } else {
             if (userPressedTrue == answerIsTrue) {
                 messageResId = R.string.true_answer;
             } else {
                 messageResId = R.string.false_answer;
             }
-            Toast.makeText(this, messageResId, Toast.LENGTH_SHORT)
-                    .show();
         }
+
+        Toast.makeText(this, messageResId, Toast.LENGTH_SHORT)
+                .show();
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
