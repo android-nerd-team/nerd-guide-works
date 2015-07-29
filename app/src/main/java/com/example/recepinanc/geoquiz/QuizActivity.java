@@ -1,6 +1,8 @@
 package com.example.recepinanc.geoquiz;
 
+import android.app.ActionBar;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
@@ -11,12 +13,16 @@ import android.view.MenuItem;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.annotation.TargetApi;
 
 
 public class QuizActivity extends ActionBarActivity {
 
     private static final String TAG = "Quiz Activity";
     private static final String KEY_INDEX = "index ";
+    private static final String CHEAT = "com.example.recepinanc.geoquiz";
+
+    private boolean answerIsTrue;
 
     private Button mTrueButton;
     private Button mFalseButton;
@@ -73,13 +79,33 @@ public class QuizActivity extends ActionBarActivity {
                 .show();
     }
 
+    @TargetApi(11)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate() called");
         setContentView(R.layout.activity_quiz);
 
-        mIsCheater = false;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            ActionBar actionBar = getActionBar();
+            actionBar.setSubtitle("Bodies of Water");
+        }
+
+        if(savedInstanceState == null){
+            Log.i(TAG,"OK.No cheating so far.");
+            mIsCheater = false;
+        }else{
+            Log.i(TAG,"getting savedInstance");
+            mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
+            Log.i(TAG,"current Index saved");
+            answerIsTrue = savedInstanceState.getBoolean(CheatActivity.EXTRA_ANSWER_IS_TRUE);
+            Log.i(TAG,"question's answer is received.");
+            mIsCheater = savedInstanceState.getBoolean(CheatActivity.EXTRA_ANSWER_SHOWN);
+            Log.i(TAG,"mIsCheater detected.");
+            mIsCheater = savedInstanceState.getBoolean(CHEAT);
+            Log.i(TAG,"precaution to rotate in Quiz.java.");
+        }
+
 
         mQuestionTextView = (TextView)findViewById(R.id.question_text_view); //get a reference for textView from its id
         int question = mQuestionBank[mCurrentIndex].getQuestion();
@@ -141,15 +167,13 @@ public class QuizActivity extends ActionBarActivity {
                 Log.d(TAG, "cheat button clicked");
                 Intent i = new Intent(QuizActivity.this,CheatActivity.class);
                 Log.d(TAG, "intent created");
-                boolean answerIsTrue = mQuestionBank[mCurrentIndex].isTrueQuestion();
+                answerIsTrue = mQuestionBank[mCurrentIndex].isTrueQuestion();
                 i.putExtra(CheatActivity.EXTRA_ANSWER_IS_TRUE,answerIsTrue);
                 startActivityForResult(i, 0);
             }
         });
 
-        if(savedInstanceState != null){
-            mCurrentIndex = savedInstanceState.getInt(KEY_INDEX,0);
-        }
+
 
         updateQuestion();
     }
@@ -159,6 +183,8 @@ public class QuizActivity extends ActionBarActivity {
         super.onSaveInstanceState(savedInstanceState);
         Log.i(TAG, "onSaveInstanceState");
         savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
+        savedInstanceState.putBoolean(CheatActivity.EXTRA_ANSWER_IS_TRUE, answerIsTrue);
+        savedInstanceState.putBoolean(CHEAT,mIsCheater);
     }
 
     @Override
